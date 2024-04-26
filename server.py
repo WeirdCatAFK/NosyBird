@@ -11,7 +11,7 @@ def index():
     return "200"
 
 #Get request to write Likes 
-@nosyBird.route("/json", methods = ["GET"])
-def get_JSON():
+@nosyBird.route("/json", methods = ["POST"])
+def save_names():
     args = request.args
     

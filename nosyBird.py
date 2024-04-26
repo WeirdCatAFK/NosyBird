@@ -1,13 +1,43 @@
 import asyncio, json, os, sqlite3
 from twscrape import API, gather
 
+class Configuration:
+    _tweetsJSON_path = None
+    _credJSON_path = None
+    _credDB_path = None
 
-def checkForAccount(dbPath):
-    if os.path.isfile(dbPath):
-        with open("Credentials.JSON", "r") as credentialsJSON:
+    @classmethod
+    def set_tweetsJSON(cls, path):
+        cls._tweetsJSON_path = path
+
+    @classmethod
+    def get_tweetsJSON(cls):
+        return str(cls._tweetsJSON_path)
+
+    @classmethod
+    def set_credJSON(cls, path):
+        cls._credJSON_path = path
+
+    @classmethod
+    def get_credJSON(cls):
+        return str(cls._credJSON_path)
+
+    @classmethod
+    def set_credDB(cls, path):
+        cls._credDB_path = path
+
+    @classmethod
+    def get_credDB(cls):
+        return str(cls._credDB_path)
+
+
+def checkForAccount():
+    credDB_path = Configuration.get_credDB()
+    if os.path.isfile(credDB_path):
+        with open(Configuration.get_credJSON(), "r") as credentialsJSON:
             credentials = json.load(credentialsJSON)
 
-        connection = sqlite3.connect(dbPath)
+        connection = sqlite3.connect(credDB_path)
         cursor = connection.cursor()
         cursor.execute(
             f"SELECT username, password \r\nFROM accounts \r\nWHERE username LIKE '{credentials["Username"]}' \r\nAND password LIKE '{credentials["Password"]}';\r\n"
@@ -22,28 +52,17 @@ def checkForAccount(dbPath):
         print("There was not a DB instance...")
         return False
 
-def restartJson(tweetsJSON_path):
-    tweets = {"user": [], "tweets": []}
-    with open(tweetsJSON_path, "w") as file:
-        json.dump(tweets, file, indent=4)
-        print("Errased")
 
-def postUser(user: str, tweetsJSON_path: str, credJSON_path: str, credDB_path: str):
-    asyncio.run(writeLikesInJSON(user,tweetsJSON_path,credJSON_path, credDB_path))
-    print('Done')
-
-
-async def writeLikesInJSON(
-    username: str,
-    tweetsJSON_path: str,
-    credJSON_path: str,
-    credDB_path: str,
-):
+async def writeLikesInJSON(username: str):
+    tweetsJSON_path = Configuration.get_tweetsJSON()
+    credJSON_path = Configuration.get_credJSON()
+    credDB_path = Configuration.get_credDB()
+    
     # Preparation
     api = API()  # API instance
     
     # Add account if it doesn't exist, else create it in db
-    if checkForAccount(credDB_path):
+    if checkForAccount():
         await api.pool.login_all()
     else:
         with open(credJSON_path, "r") as credentialsJSON:
@@ -87,3 +106,20 @@ async def writeLikesInJSON(
         json.dump(outputJSON, file, indent=4)
     print("Dumped likes onto JSON")
         
+### Server management methods
+def restartJson():
+    tweetsJSON_path = Configuration.get_tweetsJSON()
+    tweets = {"user": [], "tweets": []}
+    with open(tweetsJSON_path, "w") as file:
+        json.dump(tweets, file, indent=4)
+        print("Erased tweets from JSON")
+
+def postUser(user: str):
+    asyncio.run(writeLikesInJSON(user))
+    print('Done')
+
+def getLikes():
+    tweetsJSON_path = Configuration.get_tweetsJSON()
+    with open(tweetsJSON_path, 'r') as tweets:
+        tweets =json.load(tweets)        
+    return tweets
