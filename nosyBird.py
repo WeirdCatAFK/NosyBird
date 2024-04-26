@@ -1,5 +1,6 @@
 import asyncio, json, os, sqlite3
 from twscrape import API, gather
+from random import shuffle
 
 class Configuration:
     _tweetsJSON_path = None
@@ -107,7 +108,7 @@ async def writeLikesInJSON(username: str):
     print("Dumped likes onto JSON")
         
 ### Server management methods
-def restartJson():
+def restartLikes():
     tweetsJSON_path = Configuration.get_tweetsJSON()
     tweets = {"user": [], "tweets": []}
     with open(tweetsJSON_path, "w") as file:
@@ -120,6 +121,22 @@ def postUser(user: str):
 
 def getLikes():
     tweetsJSON_path = Configuration.get_tweetsJSON()
-    with open(tweetsJSON_path, 'r') as tweets:
-        tweets =json.load(tweets)        
+    with open(tweetsJSON_path, 'r') as JSON:
+        tweets =json.load(JSON)        
     return tweets
+
+def getMixedLikes():
+    tweetsJSON_path = Configuration.get_tweetsJSON()
+    with open(tweetsJSON_path, 'r') as JSON:
+        data = json.load(JSON)
+    pairs = list(zip(data["user"], data["tweets"]))
+    shuffle(pairs)
+    
+    mixedUsers, mixedTweets = zip(*pairs)
+    
+    mixedData = {
+        "user": list(mixedUsers),
+        "tweets": list(mixedTweets)   
+    }
+        
+    return mixedData

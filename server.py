@@ -30,6 +30,51 @@ def saveUserLikes():
             return "Something went wrong on our side", 500
     else:
         return "Invalid request method", 405
+    
+# POST request to restart likes
+@nosyBird.route("/restart_likes", methods=["POST"])
+def restartLikes():
+    if request.method == "POST":
+        try:
+            import nosyBird
+            nosyBird.restartLikes()
+            return "Restarted Likes Successfully"
+        except Exception as e:
+            print(e)
+            return "Something went wrong on our side", 500
+    else:
+        return "Invalid request method", 405
+    
 
-if __name__ == "__main__":
-    nosyBird.run(debug=True)
+# GET request to retrieve JSON data
+@nosyBird.route("/get_json", methods=["GET"])
+def getJson():
+    if request.method == 'GET':
+        try:
+            import nosyBird
+            return jsonify(nosyBird.getLikes())
+        except Exception as e:
+            print(e)
+            return "Something went wrong on our side", 500
+    else:
+        return "Invalid request method", 405
+
+
+#GET request to retrieve mixed JSON data
+@nosyBird.route("/get_mix", methods=["GET"])
+def getMixedJson():
+    if request.method == 'GET':
+        try:
+            import nosyBird
+            mixed_likes = nosyBird.getMixedLikes()
+            return jsonify(mixed_likes)
+        except Exception as e:
+            print(e)
+            return "Something went wrong on our side", 500
+    else:
+        return "Invalid request method", 405
+
+
+nosyBird.run(debug=True)
+# By defect it will run on port 5000
+# `http://localhost:5000/`
