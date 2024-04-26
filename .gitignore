@@ -6,3 +6,4 @@ tweets.JSON
 
 #Files
 /__pycache__
+/tests

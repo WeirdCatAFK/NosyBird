@@ -10,4 +10,4 @@ To make this API work you need an account that will be used to scrape twitter to
     "Password": "Example Password"
 }
 
-Check the sample.py to check out how NosyBird Works
+Check the sample.py to check out how NosyBird
