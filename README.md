@@ -14,4 +14,6 @@ to do that you will have to make a Credentials.JSON file with the next file stru
 
 
 
+The project has to be run onto its root folder
 
+This project implementation its meant to provide an example on how to use nosyBird to make your own server, but I have to declare that the server implemmentation will not be made so it will work if you change the file structure provided

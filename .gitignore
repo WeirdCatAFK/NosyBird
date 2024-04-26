@@ -1,2 +1,8 @@
+#Specific documents in root
 Credentials.JSON
 accounts.DB
+test.py
+tweets.JSON
+
+#Files
+/__pycache__
