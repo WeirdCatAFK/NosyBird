@@ -1,11 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>NosyBird</title>
+        <!-- Link to your CSS file if you have one -->
+        <link rel="stylesheet" href="nosyBird.css">
+    </head>
+    <body>
+        <!-- Header Section -->
+        <header>
+            <img src="nosyBird.png" alt="Nosy Bird Logo">
+        </header>
+
+        <!-- User Management Section -->
+        <div class="userManagement">
+            <input id="userInput" type="text" placeholder="Enter username">
+            <button id="addUser">Add Player</button>
+            <div id="usersAlreadyPlaying">
+                <!-- This section will be populated dynamically with JavaScript -->
+            </div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="main-content">
+            <!-- Button to start the process -->
+            <button id="startBtn">Start</button>
+
+            <!-- Container for tweets -->
+            <div id="tweet-container">
+                <!-- This section will be populated dynamically with JavaScript -->
+            </div>
+        </div>
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" style="display: none;">
+            <p>Loading...</p>
+        </div>
+
+        <!-- JavaScript file -->
+        <script async src="https://platform.twitter.com/widgets.js"
+            charset="utf-8"></script>
+        <script src="main.js"></script>
+
+    </body>
 </html>

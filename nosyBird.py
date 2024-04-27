@@ -129,14 +129,19 @@ def getMixedLikes():
     tweetsJSON_path = Configuration.get_tweetsJSON()
     with open(tweetsJSON_path, 'r') as JSON:
         data = json.load(JSON)
-    pairs = list(zip(data["user"], data["tweets"]))
-    shuffle(pairs)
-    
-    mixedUsers, mixedTweets = zip(*pairs)
+        
+    # Ensure both lists have the same length
+    min_length = min(len(data["user"]), len(data["tweets"]))
+    shuffled_indices = list(range(min_length))
+    shuffle(shuffled_indices)
+
+    # Shuffle both lists based on the shuffled indices
+    mixedUsers = [data["user"][i] for i in shuffled_indices]
+    mixedTweets = [data["tweets"][i] for i in shuffled_indices]
     
     mixedData = {
-        "user": list(mixedUsers),
-        "tweets": list(mixedTweets)   
+        "user": mixedUsers,
+        "tweets": mixedTweets   
     }
         
     return mixedData
