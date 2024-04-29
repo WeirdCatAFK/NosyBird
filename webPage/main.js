@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Array to store the list of players
     let players = [];
-    var tweetContainer = document.getElementById('tweet-container');
 
     // Function to send a POST request to save user likes
     function saveUserLikes(username) {
@@ -27,41 +26,39 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Function to send a POST request to restart likes
-    function restartLikes() {
-        fetch('http://localhost:5000/restart_likes', {
-            method: 'POST'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Something went wrong on the server');
-                }
-                return response.text();
-            })
-            .then(data => {
-                console.log(data); // Log success message
-            })
-            .catch(error => {
-                console.error('Error:', error);
+    async function restartLikes() {
+        try {
+            const response = await fetch('http://localhost:5000/restart_likes', {
+                method: 'POST'
             });
+
+            if (!response.ok) {
+                throw new Error('Something went wrong on the server');
+            }
+
+            const data = await response.text();
+            console.log(data); // Log success message
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
+
     // Function to fetch mixed JSON data from the server
-    function getMixedJson() {
-        return fetch('http://localhost:5000/get_mix')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Something went wrong on the server');
-                }
-                return response.json(); // Parse JSON response and return it
-            })
-            .then(data => {
-                console.log(data); // Log retrieved JSON data
-                return data; // Return the parsed JSON data
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                throw error; // Re-throw the error to propagate it to the caller
-            });
+    async function getMixedJson() {
+        try {
+            const response = await fetch('http://localhost:5000/get_mix');
+
+            if (!response.ok) {
+                throw new Error('Something went wrong on the server');
+            }
+            const data = await response.json();
+            console.log(data); // Log retrieved JSON data
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error; // Re-throw the error to propagate it to the caller
+        }
     }
 
     // Function to add a new user
@@ -113,61 +110,52 @@ document.addEventListener('DOMContentLoaded', function () {
         return tweetID;
     }
     // Function to plot a tweet
-    async function plotTweet(tweetID) {
+    function plotTweet(tweetID, user) {
         console.log("Plotting tweet:", tweetID);
         var tweetContainer = document.getElementById('tweet-container');
+
+        // Create tweet div
         var tweetDiv = document.createElement('div');
-        tweetDiv.setAttribute('id', 'tweet');
+        tweetDiv.setAttribute('class', 'tweet');
         tweetDiv.setAttribute('tweetID', tweetID);
         tweetContainer.appendChild(tweetDiv);
 
-        await twttr.widgets.createTweet(tweetID, tweetDiv, {
+        // Create user div
+        var userDiv = document.createElement('div');
+        userDiv.setAttribute('class', 'user');
+        userDiv.textContent = user;
+        tweetContainer.appendChild(userDiv);
+
+        // Load tweet
+        twttr.widgets.createTweet(tweetID, tweetDiv, {
             conversation: 'none', // or all
             cards: 'hidden', // or visible
             linkColor: '#cc0000', // default is blue
             theme: 'light', // or dark
-        }).then(function (el) {
-            el.contentDocument.querySelector('.footer').style.display = 'none';
         });
-
-
     }
+
 
     //Event Listeners
     document.getElementById('startBtn').addEventListener('click', async function () {
-        // Show loading indicator
+        // Show loading indicator start
         document.getElementById('loading-indicator').style.display = 'block';
+        console.log(players);
+        players.forEach(player => {
+            saveUserLikes(player)
+            console.log('saved')
+        });
+        data = await getMixedJson()
+        console.log(data.user.splice(0, 1))
+        plotTweet(getTweetIDFromURL(data.tweets.splice(0, 1)[0]), data.user.splice(0, 1)[0])
 
-        try {
-            // Save user likes for each player
-            await Promise.all(players.map(async player => {
-                console.log('waiting for likes')
-                saveUserLikes(player);
-                console.log('gotten likes')
-            }));
 
-            // Get mixed JSON data
-            console.log('waiting for mixedJSON')
-            const response = await getMixedJson();
-            console.log('gottenJSON')
+        restartLikes()
+        // Remove loading indicator finish
+        document.getElementById('loading-indicator').style.display = 'None';
 
-            console.log(response)
-
-            // Plot tweets
-            await Promise.all(response.tweets.map(async tweet => {
-                console.log('waiting for plotting')
-                const tweetID = getTweetIDFromURL(tweet);
-                if (tweetID) {
-                    plotTweet(tweetID);
-                }
-            }));
-        } catch (error) {
-            console.error('Error:', error);
-        } finally {
-            // Hide loading indicator after data is fetched
-            document.getElementById('loading-indicator').style.display = 'none';
-        }
-    }); document.getElementById('addUser').addEventListener('click', addUser)
+    });
+    document.getElementById('addUser').addEventListener('click', addUser)
 });
 
 
