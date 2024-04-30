@@ -124,9 +124,15 @@ document.addEventListener('DOMContentLoaded', function () {
         tweetDiv.setAttribute('tweetID', tweetID);
         tweetContainer.appendChild(tweetDiv);
 
-        // Create user div
+        // Create user reveal box
+        var revealUserDiv = document.createElement('div');
+        revealUserDiv.setAttribute('class', 'reveal-user');
+        revealUserDiv.textContent = 'reveal player';
+        tweetContainer.appendChild(revealUserDiv);
+
+        // Create user div (hidden initially)
         var userDiv = document.createElement('div');
-        userDiv.setAttribute('class', 'user');
+        userDiv.setAttribute('class', 'user hidden');
         userDiv.textContent = user;
         tweetContainer.appendChild(userDiv);
 
@@ -137,7 +143,14 @@ document.addEventListener('DOMContentLoaded', function () {
             linkColor: '#cc0000', // default is blue
             theme: 'light', // or dark
         });
+
+        // Add click event to reveal user
+        revealUserDiv.addEventListener('click', function () {
+            revealUserDiv.style.display = 'none'; // Hide reveal box
+            userDiv.classList.remove('hidden'); // Reveal user
+        });
     }
+
 
 
     document.getElementById('startBtn').addEventListener('click', function () {
@@ -175,17 +188,17 @@ document.addEventListener('DOMContentLoaded', function () {
         // Show loading indicator start
         document.getElementById('loading-indicator').style.display = 'block';
         clearTweetContainer();
-    
+
         // Display another tweet
         console.log(data.user.splice(tweetCounter, 1));
         plotTweet(getTweetIDFromURL(data.tweets.splice(tweetCounter, 1)[0]), data.user.splice(tweetCounter, 1)[0]);
-    
+
         tweetCounter++;
-    
+
         // Remove loading indicator finish
         document.getElementById('loading-indicator').style.display = 'none';
     });
-    
+
     document.getElementById('addUser').addEventListener('click', addUser);
 
 
