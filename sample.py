@@ -16,12 +16,18 @@ nosyBird.Configuration.set_credJSON(
 nosyBird.checkForAccount()
 
 # Gets the likes of a user and saves the to a JSON, the name POST its indicative of how you could use it if you mounted it onto a server
-nosyBird.postUser("WeirdCat_AFK") #Follow me btw
+nosyBird.postUser("WeirdCat_AFK")  # Follow me btw
 
-# Returns the JSON as a Python dict in case you need it, it doesnt change anything 
+# Returns the JSON as a Python dict , it doesnt change anything
 nosyBirdJSON = nosyBird.getLikes()
-for user,like in zip(nosyBirdJSON["user"], nosyBirdJSON["tweets"]):
+for user, like in zip(nosyBirdJSON["user"], nosyBirdJSON["tweets"]):
     print(user, like)
+
+# Returns a mixed JSON as a Python dict
+nosyBirdJSON = nosyBird.getMixedLikes()
+for user, like in zip(nosyBirdJSON["user"], nosyBirdJSON["tweets"]):
+    print(user, like)
+
 
 # Eliminates all the entries from the JSON so you can start over
 nosyBird.restartJson()
