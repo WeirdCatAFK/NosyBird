@@ -20,4 +20,4 @@ Check the sample.py to check out how NosyBird
 
 
 # If you just want to run it
-     just run the server on its root folder and launch the nosyBird.html on a server(not live server)
+Just run the server on its root folder and launch the nosyBird.html on a server(not live server)
