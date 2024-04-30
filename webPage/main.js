@@ -24,6 +24,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error:', error);
             });
     }
+    function clearTweetContainer() {
+        var tweetContainer = document.getElementById("tweet-container");
+        tweetContainer.innerHTML = ""; // Clearing inner HTML to remove all contents
+    }
 
     // Function to send a POST request to restart likes
     async function restartLikes() {
@@ -136,8 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    //Event Listeners
-    document.getElementById('startBtn').addEventListener('click', async function () {
+    document.getElementById('startBtn').addEventListener('click', function () {
         // Show loading indicator start
         document.getElementById('loading-indicator').style.display = 'block';
         console.log(players);
@@ -145,18 +148,49 @@ document.addEventListener('DOMContentLoaded', function () {
             saveUserLikes(player)
             console.log('saved')
         });
-        data = await getMixedJson()
-        console.log(data.user.splice(0, 1))
-        plotTweet(getTweetIDFromURL(data.tweets.splice(0, 1)[0]), data.user.splice(0, 1)[0])
+        //We replace the startBtn for a nextBtn
+        document.getElementById('nextBtn').style.display = 'inline';
 
+        document.getElementById("startBtn").style.display = 'None';
+        //We wait 10 seconds or so to wait to get the likes of a person (I know there are better ways to implement this but this is what works best for me)
+        setTimeout(async function () {
+            data = await getMixedJson()
+            console.log(data.user.splice(0, 1))
+            //Plot an Inicial Tweet
+            plotTweet(getTweetIDFromURL(data.tweets.splice(0, 1)[0]), data.user.splice(0, 1)[0])
+            // Remove loading indicator finish
+            document.getElementById('loading-indicator').style.display = 'None';
 
-        restartLikes()
-        // Remove loading indicator finish
-        document.getElementById('loading-indicator').style.display = 'None';
+            setTimeout(async function () {
+                restartLikes()
+            }, 5000)
+
+        }, 10000)
+
 
     });
-    document.getElementById('addUser').addEventListener('click', addUser)
+
+    tweetCounter = 1
+    document.getElementById('nextBtn').addEventListener('click', async function () {
+        // Show loading indicator start
+        document.getElementById('loading-indicator').style.display = 'block';
+        clearTweetContainer();
+    
+        // Display another tweet
+        console.log(data.user.splice(tweetCounter, 1));
+        plotTweet(getTweetIDFromURL(data.tweets.splice(tweetCounter, 1)[0]), data.user.splice(tweetCounter, 1)[0]);
+    
+        tweetCounter++;
+    
+        // Remove loading indicator finish
+        document.getElementById('loading-indicator').style.display = 'none';
+    });
+    
+    document.getElementById('addUser').addEventListener('click', addUser);
+
+
 });
+
 
 
 
