@@ -124,15 +124,9 @@ document.addEventListener('DOMContentLoaded', function () {
         tweetDiv.setAttribute('tweetID', tweetID);
         tweetContainer.appendChild(tweetDiv);
 
-        // Create user reveal box
-        var revealUserDiv = document.createElement('div');
-        revealUserDiv.setAttribute('class', 'reveal-user');
-        revealUserDiv.textContent = 'reveal player';
-        tweetContainer.appendChild(revealUserDiv);
-
-        // Create user div (hidden initially)
+        // Create user div
         var userDiv = document.createElement('div');
-        userDiv.setAttribute('class', 'user hidden');
+        userDiv.setAttribute('class', 'user');
         userDiv.textContent = user;
         tweetContainer.appendChild(userDiv);
 
