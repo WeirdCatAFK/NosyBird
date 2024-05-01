@@ -54,7 +54,7 @@ def checkForAccount():
         return False
 
 
-async def writeLikesInJSON(username: str):
+async def postUser(username: str):
     tweetsJSON_path = Configuration.get_tweetsJSON()
     credJSON_path = Configuration.get_credJSON()
     credDB_path = Configuration.get_credDB()
@@ -115,9 +115,6 @@ def restartLikes():
         json.dump(tweets, file, indent=4)
         print("Erased tweets from JSON")
 
-def postUser(user: str):
-    asyncio.run(writeLikesInJSON(user))
-    print('Done')
 
 def getLikes():
     tweetsJSON_path = Configuration.get_tweetsJSON()

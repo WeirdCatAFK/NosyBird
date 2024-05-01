@@ -2,8 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Array to store the list of players
     let players = [];
 
-    // Function to send a POST request to save user likes
-    function saveUserLikes(username) {
+    function savePlayersLikes(username) {
         fetch('http://localhost:5000/username', {
             method: 'POST',
             headers: {
@@ -18,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.text();
             })
             .then(data => {
-                console.log(data); // Log success message
+                console.log(data); 
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -26,10 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     function clearTweetContainer() {
         var tweetContainer = document.getElementById("tweet-container");
-        tweetContainer.innerHTML = ""; // Clearing inner HTML to remove all contents
+        tweetContainer.innerHTML = ""; 
     }
 
-    // Function to send a POST request to restart likes
     async function restartLikes() {
         try {
             const response = await fetch('http://localhost:5000/restart_likes', {
@@ -41,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             const data = await response.text();
-            console.log(data); // Log success message
+            console.log(data); 
         } catch (error) {
             console.error('Error:', error);
         }
@@ -57,20 +55,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error('Something went wrong on the server');
             }
             const data = await response.json();
-            console.log(data); // Log retrieved JSON data
+            console.log(data); 
             return data;
         } catch (error) {
             console.error('Error:', error);
-            throw error; // Re-throw the error to propagate it to the caller
+            throw error; 
         }
     }
 
-    // Function to add a new user
-    function addUser() {
-        // Get the value entered by the user
+    function addPlayer() {
         const userInput = document.getElementById('userInput').value.trim();
 
-        // Check if the user input is not empty
         if (userInput !== '') {
             players.push(userInput);
 
@@ -78,18 +73,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const newUser = document.createElement('div');
             newUser.className = 'user';
             newUser.textContent = userInput;
-
-            // Create a button to remove the user
             const removeButton = document.createElement('button');
             removeButton.className = 'removePlayer';
             removeButton.textContent = 'Remove Player';
             removeButton.addEventListener('click', function () {
-                // Remove the user from the array
                 const index = players.indexOf(userInput);
                 if (index !== -1) {
                     players.splice(index, 1);
                 }
-                // Remove the user element from the DOM
                 newUser.remove();
             });
 
@@ -97,11 +88,9 @@ document.addEventListener('DOMContentLoaded', function () {
             newUser.appendChild(removeButton);
             document.getElementById('usersAlreadyPlaying').appendChild(newUser);
 
-            // Clear the input field
             document.getElementById('userInput').value = '';
         }
     }
-    // Function to get a tweet id from its url
     function getTweetIDFromURL(url) {
         var tweetID;
         var regex = /\/status\/(\d+)/;
@@ -118,30 +107,21 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Plotting tweet:", tweetID);
         var tweetContainer = document.getElementById('tweet-container');
 
-        // Create tweet div
         var tweetDiv = document.createElement('div');
         tweetDiv.setAttribute('class', 'tweet');
         tweetDiv.setAttribute('tweetID', tweetID);
         tweetContainer.appendChild(tweetDiv);
 
-        // Create user div
         var userDiv = document.createElement('div');
         userDiv.setAttribute('class', 'user');
         userDiv.textContent = user;
         tweetContainer.appendChild(userDiv);
 
-        // Load tweet
         twttr.widgets.createTweet(tweetID, tweetDiv, {
             conversation: 'none', // or all
             cards: 'hidden', // or visible
             linkColor: '#cc0000', // default is blue
             theme: 'light', // or dark
-        });
-
-        // Add click event to reveal user
-        revealUserDiv.addEventListener('click', function () {
-            revealUserDiv.style.display = 'none'; // Hide reveal box
-            userDiv.classList.remove('hidden'); // Reveal user
         });
     }
 
@@ -152,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-indicator').style.display = 'block';
         console.log(players);
         players.forEach(player => {
-            saveUserLikes(player)
+            savePlayersLikes(player)
             console.log('saved')
         });
         //We replace the startBtn for a nextBtn
@@ -193,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-indicator').style.display = 'none';
     });
 
-    document.getElementById('addUser').addEventListener('click', addUser);
+    document.getElementById('addPlayer').addEventListener('click', addPlayer);
 
 
 });

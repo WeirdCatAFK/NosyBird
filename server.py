@@ -10,6 +10,8 @@ nosyBird.Configuration.set_credJSON("Credentials.JSON")
 # Create a web app instance with Flask
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+CORS(app, resources={r"/username": {"origins": "http://localhost:8080"}})
+
 
 # Normal Response
 @app.route("/")
@@ -18,14 +20,14 @@ def index():
 
 # POST request to write likes
 @app.route("/username", methods=["POST"])
-def saveUserLikes():
+async def saveUserLikes():
     if request.method == "POST":
         data = request.json
         username = data.get("username")
         if username:
             try:
                 import nosyBird
-                nosyBird.postUser(username)
+                await nosyBird.postUser(username)
                 return "Got Likes Successfully"
             except Exception as e:
                 print(e)  # Log the exception for debugging
