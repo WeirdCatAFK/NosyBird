@@ -1,5 +1,10 @@
-# What is NosyBird
-NosyBird its a python library to easily manage like webscrapping to be implemmented on games
+
+
+# What is NosyBird 
+
+<img src="https://github.com/WeirdCatAFK/NosyBird/blob/main/webPage/nosyBird.png"
+     alt="nosyBird"
+     style="float: left; margin-right: 10px; width: 100px" />NosyBird its a python library to easily manage twitters like webscrapping (formerly x) to be implemmented on games 
 
 # What it's this project
 Here I am showing you a little example on how to use NosyBird to make a fun twitter game where you add n users to guess who liked the tweet
