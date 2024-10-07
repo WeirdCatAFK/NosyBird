@@ -1,5 +1,5 @@
 
-
+# Nosy bird is dead!, thanks to Elon Musk removing public access to twitter likes
 # What is NosyBird 
 
 <img src="https://github.com/WeirdCatAFK/NosyBird/blob/main/webPage/nosyBird.png"
